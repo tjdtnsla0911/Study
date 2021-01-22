@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>관리자 포인트 페이지</h2>
+  <p>유저들의 포인트 현황입니다</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>username</th>
+        <th>name</th>
+        <th>createDate</th>
+        <th>id</th>
+        <th>userid</th>
+        <th>totalPoint</th>
+            <th>historyDate</th>
+        <th>기능</th>
+
+
+      </tr>
+    </thead>
+    <tbody>
+    {{#pointList}}
+      <tr class="success">
+        <td>{{username}}</td>
+        <td>{{name}}</td>
+        <td>{{createDate}}</td>
+        <td>{{phone}}</td>
+        <td>{{address}}</td>
+        <td>{{detail_address}}</td>
+        <td>{{totalPoint}}</td>
+
+        <input type="hidden" id="username{{id}}" name="username" value="{{username}}"/>
+        <input type="hidden" id="name{{id}}" name="name" value="{{name}}"/>
+        <input type="hidden" id="createDate{{id}}" name="createDate" value="{{createDate}}"/>
+        <input type="hidden" id="id{{id}}" name="id" value="{{id}}"/>
+        <td><button class="btn-ViewDetails" id="bt-ViewDetails-{{id}}" style="WIDTH: 80pt; HEIGHT: 20pt">상세내용</button><br/>
+        <button type="button" data-toggle="modal" data-target="#myModal{{id}}" style="WIDTH: 80pt; HEIGHT: 20pt">포인트주기</button> <br />
+
+
+						<form>
+							<div class="modal fade" id="myModal{{id}}" class="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+
+											<input type="hidden" name="id" id="modalid{{id}}" value="{{id}}" /><br/><br/>
+											<input type="hidden" name="totalPoint" id="modaltotalPoint{{id}}" value="{{totalPoint}}"/>
+ 										대상 이름:<input type="text" name="name" id="modalname{{id}}" value="{{name}}" /><br/><br/>
+								대상  ID: &nbsp;  <input type="text" name="username" id="modalusername{{id}}" value="{{username}}" /><br/><br/>
+										부여포인트:<input type="text" name="upPoint" id="modalupPoint{{id}}" value=""/><br/><br/>
+										차감포인트:<input type="text" name="minusPoint" id="modalminusPoint{{id}}" value=""/><br/><br/>
+										 사유 : <input type="text" name="reason" id="modalreason{{id}}" value=""/><br/>
+
+
+
+										</div>
+										<div class="modal-body"></div>
+										<div class="modal-footer">
+											<input class="btn-update" type="button" id="bt-update-{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt" value="수정하기" />
+											<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+										</div>
+
+						</div>
+								</div>
+							</div>
+
+						</form>
+      </td>
+      </tr>
+      {{/pointList}}
+    </tbody>
+  </table>
+
+<hr/>
+<div id="ajax">
+
+
+<!-- 여기에 ajax한거 새로나옴 -->
+</div>
+</div>
+
+</body>
+<script src="/js/addminPoint.js">
+</script>
+
+</html>

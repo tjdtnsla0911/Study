@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.Repository">
+
+<select id="findNotices" resultType="com.aruerue.shop.controller.dto.notice.NoticeRespDto">
+	SELECT id, title, createDate, readCount
+	FROM notice;
+</select>
+
+<select id="findNoticeById" resultType="com.aruerue.shop.controller.dto.notice.NoticeDetailsRespDto">
+	SELECT id, title, createDate, readCount, content
+	FROM notice
+	WHERE id = #{id};
+</select>
+
+</mapper>

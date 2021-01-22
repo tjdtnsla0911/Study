@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style type="text/css">
+body {
+
+}
+
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+	padding: 45px;
+	border: 1px solid #888;
+	width: 60%; /* Could be more or less, depending on screen size */
+}
+/* The Close Button */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+</style>
+
+</head>
+<body>{{>./header}}
+
+
+
+<div class="container">
+  <h2>관리자 리뷰페이지</h2>
+  <b>현재 답변을 기다리는 review :{{size}}개</b>
+  <button style="float: right;" onclick="gogogo()">답변이 완료된 Review페이지로</button>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>상품명</th>
+        <th>제목</th>
+        <th>글쓴이</th>
+        <th>작성시간</th>
+        <th>평점</th>
+      </tr>
+    </thead>
+    <tbody>
+     {{#notReivew}}
+      <tr class="danger">
+        <td>{{title}}</td>
+        <td><button class="btn">{{content}}</button></td>
+        <td>{{username}}</td>
+        <td>{{createDate}}</td>
+        <td><span style="color: red;">{{realStar}}</span></td>
+      </tr>
+
+
+	<div class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<span style="color: red;">{{realStar}}</span><br/>
+			<span style="color: gray;">{{username}}&nbsp&nbsp{{createDate}}</span>
+			<br/>
+			<hr />
+			<br/>
+			<img src="{{img}}" style="width: 500px; height: 250px;"/><br/><br/>
+			{{content}}
+			<br/><br/>
+
+			<img alt="X" src="{{thumb}}" style="width: 40px; height: 50px;">
+			{{title}}<br/><br/>
+			<form action="/addminReviewAnswer" method="post">
+			<input type="hidden" id="id" value="{{id}}" name="id"/>
+			<input type="text" style=" width:500px; height:150px;" id="comment" name="comment"/>
+			<input type="submit" value="답하기"/>
+			</form>
+
+
+		</div>
+	</div>
+
+          {{/notReivew}}
+
+    </tbody>
+
+  </table>
+      {{^notReview}}
+      <br/>
+      <br/>
+      <br/>
+          <h1>현재 작성하지않은 답변이 없습니다!</h1>
+          {{/notReview}}
+</div>
+
+</body>
+
+<script>
+function gogogo(){
+	location.href="/addminReviewList"
+}
+</script>
+
+<script type="text/javascript">
+
+
+//Modal을 가져옵니다.
+var modals = document.getElementsByClassName("modal");
+// Modal을 띄우는 클래스 이름을 가져옵니다.
+var btns = document.getElementsByClassName("btn");
+
+// Modal을 닫는 close 클래스를 가져옵니다.
+var spanes = document.getElementsByClassName("close");
+console.log('spanes =', spanes);
+var funcs = [];
+
+// Modal을 띄우고 닫는 클릭 이벤트를 정의한 함수
+function Modal(num) {
+//	console.log('넘은 ? = ', num);
+	return function() {
+		// 해당 클래스의 내용을 클릭하면 Modal을 띄웁니다.
+		btns[num].onclick = function() {
+			modals[num].style.display = "block";
+		//	console.log(num);
+		};
+
+		// <span> 태그(X 버튼)를 클릭하면 Modal이 닫습니다.
+		spanes[num].onclick = function() {
+			modals[num].style.display = "none";
+		};
+	};
+}
+
+// 원하는 Modal 수만큼 Modal 함수를 호출해서 funcs 함수에 정의합니다.
+for (var i = 0; i < btns.length; i++) {
+	funcs[i] = Modal(i);
+}
+
+// 원하는 Modal 수만큼 funcs 함수를 호출합니다.
+for (var j = 0; j < btns.length; j++) {
+	funcs[j]();
+}
+
+// Modal 영역 밖을 클릭하면 Modal을 닫습니다.
+window.onclick = function(event) {
+	if (event.target.className == "modal") {
+		event.target.style.display = "none";
+	}
+};
+
+</script>
+</html>
+

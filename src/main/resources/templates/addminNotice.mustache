@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body >
+
+{{>./header}}
+
+<div class="container">
+  <h2>Contextual Classes</h2>
+	<button type="button" data-toggle="modal" data-target="#myModal" style="WIDTH: 60pt; HEIGHT: 20pt">글쓰기</button></td>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>title</th>
+
+        <th>createDate</th>
+        <th>readCount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#noticeList}}
+      <tr class="active">
+       <td>{{id}}</td>
+              <td><a href="#" onclick="asdf({{id}})" style="color: black; text-decoration: none;" >{{title}}</a></td>
+
+        <td>{{createDate}}</td>
+        <td>{{readCount}}</td>
+      </tr>
+        {{/noticeList}}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">Notice 글올리기</h4>
+						</div>
+						<div class="modal-body">
+
+
+					<br />
+				<form method="post" action="/upNotice"  enctype="multipart/form-data">
+					<input type="hidden" id="nullCheck" name="nullCheck" class="nullCheck" value="null"/><br/><br/>
+					<input type="text" id="title" name="title" class="title" placeholder="제목을 적으세요"/><br/><br/>
+					<input type="text" id="content" name="content" class="content" placeholder="제목을 적으세요"/><br/><br/>
+					<input type="file" id="thumb" name="thumb" class="thumb"/><br /><br/>
+
+						<div class="img_wrap">
+					<img id="test" class="test" src="" style="height: 200px"										width="200px" />
+						</div>
+						</div>
+						<div class="modal-footer">
+
+							<input type="submit" value="글올리기">
+							</form>
+							<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+</body>
+<script>
+var sel_file;
+$(document).ready(function() {
+	$(".thumb").on("change", handleImgFileSelect);
+});
+console.log('file의 값 = ',$(".thumb").val());
+function handleImgFileSelect(e) {
+	var files = e.target.files;
+	var filesArr = Array.prototype.slice.call(files);
+	filesArr.forEach(function(f) {
+		if (!f.type.match("image.*")) {
+			alert("확장자는 이미지 확장자만 가능합니다.");
+			return;
+		}
+		sel_file = f;
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$(".test").attr("src", e.target.result);
+			$("#nullCheck").attr("value", "널아니다 ㅅㅂ");
+		}
+		reader.readAsDataURL(f);
+	});
+}
+</script>
+
+
+
+<script type="text/javascript">
+function asdf(id){
+	console.log(id);
+	$.ajax({
+		type: "PUT",
+		url: "/selectNotice/"+id,
+		data: id, // http body데이터
+		contentType: "application/json; charset=utf-8",
+	       // enctype: 'multipart/form-data',// body데이터가 어떤 타입인지(MIME)
+		dataType: "JSON" // 요청을 서버로해서 응답이 왔을 때 기본적으로 모든 것이 문자열 (생긴게
+							// json이라면) => javascript오브젝트로 변경
+	}).done(function(resp){
+		console.log(resp);
+		console.log('resp.id=',resp.id);
+        location.href = '/selectRealNotice/'+resp.id;
+
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+}
+</script>
+</html>

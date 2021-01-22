@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.AddminNoticeRepository">
+<select id="findAllNotice" resultType="com.aruerue.shop.model.Notice" >
+select * from notice;
+</select>
+
+
+<update id="updateSelectNotice">
+update notice set readCount = #{readCount} +1 where id=#{id}
+</update>
+
+<select id="findSelectnotice" resultType="com.aruerue.shop.model.Notice">
+select * from notice where id=#{id}
+</select>
+
+<select id="findUpnotice" resultType="com.aruerue.shop.model.Notice">
+select *
+from notice
+where id>#{id}
+limit 1;
+</select>
+
+<select id="findDownnotice" resultType="com.aruerue.shop.model.Notice">
+SELECT GREATEST(id,1) as id,title
+FROM notice
+where id <![CDATA[ < ]]> #{id};
+
+</select>
+
+
+<insert id="insertNotice">
+INSERT INTO notice(title,content,createDate,readCount,thumb)
+values(#{title},#{content},now(),0,#{thumb})
+</insert>
+
+<delete id="deleteNotice">
+delete from notice where id = #{id}
+</delete>
+
+<update id="update">
+update notice set title=#{title}, content=#{content} , thumb=#{thumb} ,createDate=now()
+where id=#{id}
+</update>
+
+
+
+
+
+</mapper>

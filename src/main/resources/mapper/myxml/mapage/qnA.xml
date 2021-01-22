@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.MyPageRepository">
+
+<select id="findQnaById" resultType="com.aruerue.shop.controller.dto.mypage.MypageQnaRespDto">
+	SELECT q.id, q.title, q.content, q.createDate
+	FROM qna q LEFT OUTER JOIN user u
+	ON u.id = q.userId
+	WHERE u.id = #{id};
+</select>
+
+
+</mapper>

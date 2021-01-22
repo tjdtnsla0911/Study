@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.AddminPointRepository">
+<select id="findAllPointList" resultType="com.aruerue.shop.addminDto.AddminPointDto">
+
+</select>
+
+<select id="findbyUsersPoint" resultType="com.aruerue.shop.addminDto.AddminPointDto">
+select us.username,us.name,us.createDate,p.id,p.userid,p.historyDate,p.reason,p.point,us.totalPoint,p.userTotalPoint
+from point p inner join user us
+on us.id=p.userid and us.id=#{userId};
+</select>
+
+<insert id="insertPoint">
+insert into point(userId,historyDate,reason,point,userTotalPoint)
+values(${id},now(),#{reason},#{point},#{totalPoint})
+</insert>
+
+
+</mapper>

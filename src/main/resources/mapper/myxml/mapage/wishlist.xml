@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.MyPageRepository">
+
+<select id="findWishlistsById" resultType="com.aruerue.shop.controller.dto.mypage.MypageWishResponseDto">
+	SELECT w.id, p.thumb, p.title, p.price, p.discounted, p.sale, p.newly, p.best
+	FROM wishlist w LEFT OUTER JOIN product p
+	ON w.productId = p.id
+	WHERE w.userId = #{id};
+</select>
+
+<insert id="saveWishlist" >
+	INSERT INTO wishlist (userId, productId)
+ 	VALUES (#{userId}, #{productId});
+</insert>
+
+<delete id="deleteWishlist">
+ DELETE FROM wishlist WHERE id = #{id};
+</delete>
+
+</mapper>

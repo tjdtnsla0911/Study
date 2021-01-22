@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aruerue.shop.repository.AddminReviewRepository">
+<select id="findAllReviewList" resultType="com.aruerue.shop.addminDto.AddminReviewDto">
+select us.username,pro.title,pro.thumb,re.img,re.existenceOfImg,re.orderId,od.howToPay,re.star,re.createDate,re.id,re.productId,re.content,rc.comment,rc.createDate as "addCreateDate"
+from product pro inner join user us inner join review re inner join orders od inner join recomment rc
+on pro.id= re.productid and re.userId  = us.id and re.orderId = od.id and re.id = rc.reviewId
+</select>
+
+<select id="findAllWaitingReviewList" resultType="com.aruerue.shop.addminDto.AddminReviewDto">
+select us.username,pro.title,pro.thumb,re.img,re.existenceOfImg,re.orderId,od.howToPay,re.star,re.createDate,re.id,re.productId,re.content
+from product pro inner join user us inner join review re inner join orders od
+on pro.id= re.productid and re.userId  = us.id and re.orderId = od.id and re.id not in(select re.id
+from product pro inner join user us inner join review re inner join orders od inner join recomment rc
+on pro.id= re.productid and re.userId  = us.id and re.orderId = od.id and re.id = rc.reviewId)
+</select>
+
+<insert id="insertrecomment">
+insert into recomment(reviewId,comment,createDate)
+values(#{id},#{comment},now())
+</insert>
+</mapper>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+{{#notice}}
+
+<input type="hidden" id="id" name="id" value="{{id}}">
+<input type="text" name="title" id="title" value="{{title}}">
+<br/>
+작성날짜 : <input type="text" name="createDate" id="createDate" value="{{createDate}}" >
+<br/>
+<hr/>
+<img alt="등록된사진이없습니다" src="{{thumb}}" style="width: 300px; height: 300px">
+<br/>
+<br/>
+<input type="text" name="content" id="content" value="{{content}}">
+{{/notice}}
+<br/>
+<hr/>
+<br/>
+
+{{#noticUp}}
+<a href="/selectRealNotice/{{id}}?{{id}}" style="color: black; text-decoration: none;">
+<img src="http://localhost:8080/images/up.png">
+{{title}}
+</a>
+{{/noticUp}}
+
+<br/>
+<hr/>
+<br/>
+
+
+{{#noticeDown}}
+<a href="/selectRealNotice/{{id}}?{{id}}" style="color: black; text-decoration: none;">
+<img src="http://localhost:8080/images/down.png">
+{{title}}
+</a>
+{{/noticeDown}}
+
+<br/>
+<br/>
+<button onclick="deletes({{id}})" id="{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt">삭제하기</button>
+
+<button type="button" data-toggle="modal" data-target="#myModal" style="WIDTH: 60pt; HEIGHT: 20pt">수정하기</button>
+
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">Notice 글올리기</h4>
+						</div>
+						<div class="modal-body">
+
+
+					<br />
+					
+					<input type="hidden" id="id{{id}}" name="id" class="id" value="{{id}}"/>
+					<input type="hideen" id="nullCheck{{id}}" name="nullCheck" class="nullCheck" value="null"/><br/><br/>
+				제목 :<input type="text" id="title{{id}}" name="title" class="title" placeholder="제목을 적으세요"/><br/><br/>
+				내용 :<input type="text" id="content{{id}}" name="content" class="content" placeholder="제목을 적으세요"/><br/><br/>
+					<input type="file" id="thumb{{id}}" name="thumb" class="thumb"/><br /><br/>
+						
+						<div class="img_wrap">
+					<img id="test" class="test" src="" style="height: 200px" width="200px" />
+						</div>
+						</div>
+						<div class="modal-footer">
+						
+							<button class="btn-update" id="bt-update-{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt">수정하기</button> <br />
+						
+							<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+</body>
+
+<!-- -------------------Java Scrpit 영역--------------- -->
+<script>
+var index ={
+	init: function(){
+		$(".btn-update").on("click", (e)=>{ // function(){} , ()=>{} this를
+			// 바인딩하기 위해서!!
+
+this.update(e);
+});
+},
+
+
+	
+	update: function(e){
+		console.log('e = ',e);
+		
+		var temp = (e.target.id).replace("bt-update-","");
+
+		var data2 = {
+				id: temp
+		};
+		
+		console.log(data2.id);
+		
+		var formData = new FormData();
+		formData.append('id',$('#id'+data2.id).val());
+		formData.append('title',$('#title'+data2.id).val());
+		formData.append('content',$('#content'+data2.id).val());
+		formData.append('thumb', $("#thumb"+data2.id)[0].files[0]);
+		formData.append('nullCheck',$('.nullCheck').val());
+
+		$.ajax({
+		type: "PUT",
+		url: "/changeNotice/"+data2.id,
+		contentType: 'multipart/form-data',
+		data: formData, // http body데이터
+		 processData: false,
+		 contentType: false,
+		}).done(function(resp){
+			alert("물품변경이 완료되었습니다.");
+			location.href("/noticeList");
+		}).fail(function(error){
+			alert(JSON.stringify(error));
+		});
+	},
+	
+	
+}
+
+index.init();
+
+
+
+function deletes(id){
+
+	console.log(id);
+
+	$.ajax({
+		type: "DELETE",
+		url: "/deleteNotice/"+id,
+		data: id, // http body데이터
+		contentType: "application/json; charset=utf-8",
+	       // enctype: 'multipart/form-data',// body데이터가 어떤 타입인지(MIME)
+		dataType: "text" // 요청을 서버로해서 응답이 왔을 때 기본적으로 모든 것이 문자열 (생긴게
+							// json이라면) => javascript오브젝트로 변경
+	}).done(function(resp){
+
+		console.log(resp);
+	
+		alert('성공');
+        location.href = '/noticelist';
+	
+
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+}
+
+//////////////////////////////////////////////////////////////
+var sel_file;
+$(document).ready(function() {
+	$(".thumb").on("change", handleImgFileSelect);
+});
+console.log('file의 값 = ',$(".thumb").val());
+function handleImgFileSelect(e) {
+	var files = e.target.files;
+	var filesArr = Array.prototype.slice.call(files);
+	filesArr.forEach(function(f) {
+		if (!f.type.match("image.*")) {
+			alert("확장자는 이미지 확장자만 가능합니다.");
+			return;
+		}
+		sel_file = f;
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$(".test").attr("src", e.target.result);
+			$(".nullCheck").attr("value", "널아니다 ㅅㅂ");
+		}
+		reader.readAsDataURL(f);
+	});
+}
+</script>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+{{>./header}}
+<div class="container">
+  <h2>관리자 어바웃 페이지입니다</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>기능</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{#aboutList}}
+
+      <tr class="success">
+        <td>{{id}}</td>
+        <td>{{subject}}</td>
+        <td>{{content}}</td>
+            <td><button class="btn-delete" id="bt-delete-{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt">삭제하기</button>
+              <button type="button" data-toggle="modal" data-target="#myModal{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt">답장</button> <br />
+						<form>
+							<div class="modal fade" id="myModal{{id}}" class="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+
+							<input type="text"><br/><br/>
+							<textarea rows="13" cols="50"></textarea>
+
+
+
+										</div>
+										<div class="modal-body"></div>
+										<div class="modal-footer">
+											<input class="btn-update" type="button" id="bt-update-{{id}}" style="WIDTH: 60pt; HEIGHT: 20pt" value="답장하기" />
+											<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+										</div>
+
+						</div>
+								</div>
+							</div>
+
+						</form>
+            <br />
+      </tr>
+    {{/aboutList}}
+    </tbody>
+  </table>
+</div>
+
+</body>
+
+<script>
+let index ={
+		init : function(){
+			$(".btn-delete").on("click", (e)=>{
+				console.log('여기왔음');
+				this.aboutDelete(e);
+			})
+
+				$(".btn-update").on("click", (e)=>{
+				console.log('여기왔음');
+				this.aboutUpdate(e);
+			})
+		},
+
+		aboutUpdate: function(e){
+			let temp = (e.target.id).replace("bt-update-","");
+			let data = {
+					id:temp
+			};
+			console.log('최종 = ',data.id);
+			$.ajax({
+				type:"delete",
+				url : "/addminAboutDelete/"+data.id,
+				data:JSON.stringify(data),
+				contentType: "application/json; charset=utf-8",
+				dataType:"text"
+
+
+
+			}).done(function(resp){
+				alert('답장완료');
+				location.href="/addminAboutList"
+			}).fail(function(error){
+				alert('에러 ^_^');
+			});
+		},
+
+
+
+	aboutDelete: function(e){
+		let temp = (e.target.id).replace("bt-delete-","");
+		let data = {
+				id:temp
+		};
+		console.log('최종 = ',data.id);
+		$.ajax({
+			type:"delete",
+			url : "/addminAboutDelete/"+data.id,
+			data:JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType:"text"
+
+
+
+		}).done(function(resp){
+			alert('성공');
+			location.href="/addminAboutList"
+		}).fail(function(error){
+			alert('에러 ^_^');
+		});
+	},
+}
+index.init();
+</script>
+</html>
+

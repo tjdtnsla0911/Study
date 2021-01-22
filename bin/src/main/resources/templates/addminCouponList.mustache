@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Bootstrap Example</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style type="text/css">
+body {
+
+}
+
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+	padding: 45px;
+	border: 1px solid #888;
+	width: 60%; /* Could be more or less, depending on screen size */
+}
+/* The Close Button */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+	<!--------------------------- 여긴 모달 영역 ----------------------->
+
+
+
+
+	<button class="btn" style="float: right;">쿠폰등록하기</button>
+	<div class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>쿠폰을 등록합시다!!</h2>
+			<hr />
+			<form>
+				신규 쿠번번호 <input id="code" name="code" type="text" value="" required />
+				<button class="btn-ViewDetails" id="bt-ViewDetails" style="WIDTH: 100pt; HEIGHT: 20pt">쿠폰번호 생성</button>
+				<br /> <br /> 시작날짜 : <input type="date" name="validityStart" id="validityStart" required><br />
+				<br /> 종료날짜 : <input type="date" id="validityEnd" name="validityEnd" required><br />
+				<br /> 쿠폰이름 : <input type="text" id="reason" name="reason" /><br />
+				<br /> 할인 금액 : <input type="text" id="salePrice" name="salePrice" required><br />
+				<button class="upload" id="bt-upload" style="WIDTH: 100pt; HEIGHT: 20pt; float: right;">등록하기</button>
+		</div>
+	</div>
+
+
+
+	<h4>
+		<input type="text" value="현재남은 쿠폰 : {{size}} 개" style="border: none; border-right: 0px; border-top: 0px; boder-left: 0px; boder-bottom: 0px;" />
+	</h4>
+
+	<div class="container">
+		<h2>관리자 쿠폰 리스트</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>UserNo</th>
+					<th>이름</th>
+					<th>ID</th>
+					<th>성별</th>
+					<th>주소</th>
+					<th>상세주소</th>
+					<th>가입일자</th>
+					<th>쿠폰개수</th>
+					<th>기능</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#couponUserList}}
+				<tr   class="info">
+					<td>{{userId}}</td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{name}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{username}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{gender}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{address}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{detail_address}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{createDate}}</a></td>
+					<td><a href="#" onclick="ddd({{userId}})" style="text-decoration:none; color: black;">{{whatCoupons}}</a></td>
+					<td>
+
+
+
+						<button class="btn">쿠폰주기</button>
+						<div class="modal">
+							<div class="modal-content">
+								<div style="overflow: scroll; width: 600px; height: 300px;" class="container">
+									<table>
+										<thead class="table">
+											<tr>
+												<th>코드</th>
+												<th>시작일자</th>
+												<th>종료일자</th>
+												<th>쿠폰사유</th>
+												<th>세일금액</th>
+											</tr>
+
+										</thead>
+										<tbody>
+
+
+											<tr class="info">
+		<form novalidate>
+
+
+
+											<button type="button" class="ss" onclick="asdf({{userId}})">동의하기</button>
+
+												{{#nowCoupon}}
+												<td>{{id}}</td>
+												<td>{{code}}&nbsp</td>
+												<td>{{validityStart}}&nbsp&nbsp&nbsp</td>
+												<td>{{validityEnd}}&nbsp&nbsp&nbsp</td>
+												<td>{{reason}}&nbsp&nbsp&nbsp</td>
+												<td>{{salePrice}}&nbsp&nbsp&nbsp</td>
+												<input type="hidden" value="" class="userId"/>
+												<input type="hidden" id="code{{id}}" name="code" value="{{code}}">
+												<input type="hidden" id="validityStart{{id}}" name="validityStart" value="{{validityStart}}">
+												<input type="hidden" id="validityEnd{{id}}" name="validityEnd" value="{{validityEnd}}">
+												<input type="hidden" id="reason{{id}}" name="reason" value="{{reason}}">
+												<input type="hidden" id="salePrice{{id}}" name="salePrice" value="{{salePrice}}">
+												<input type="hidden" id="id{{id}}" name="id" value="{{id}}">
+
+</form>
+												<td><input type="hidden" value="{{id}}" />
+														<button class="btn-give" id="bt-give-{{id}}"
+							style="WIDTH: 60pt; HEIGHT: 20pt">쿠폰부여</button> <br />
+
+												</td>
+
+											</tr>
+											{{/nowCoupon}}
+										</tbody>
+									</table>
+
+
+								</div>
+								<span class="close">&times;</span>
+
+
+							</div>
+						</div> <!--<button class="upload" id="bt-upload" style="WIDTH: 60pt; HEIGHT: 20pt;">직접주기</button>-->
+					</td>
+				</tr>
+
+
+				{{/couponUserList}}
+
+			</tbody>
+		</table>
+	</div>
+	<hr/>
+
+	<!-- 여기에 내용 새로나와용^^ -->
+
+		<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+
+					<th>아이디</th>
+					<th>이름</th>
+					<th>가입일자</th>
+					<th>쿠폰번호</th>
+					<th>시작일자</th>
+					<th>종료일자</th>
+					<th>할인가격</th>
+					<th>쿠폰사유</th>
+					<th>사용여부</th>
+
+				</tr>
+				</thead>
+				<tbody id="ajax">
+
+
+
+
+
+							</tbody>
+				</table>
+
+	</div>
+
+
+
+
+
+</body>
+
+
+<script>
+function ddd(e){
+	let data = {
+			userId:e
+	}
+	console.log('찍힌 아이디 = ',e);
+
+	$.ajax({
+		type: "PUT",
+		url: "/findCoupon/"+data.userId,
+		data: JSON.stringify(data),
+		contentType: "application/json; charset=utf-8",
+		dataType: "JSON"
+
+	}).done(function(resp){
+	console.log('성공한 내용 =',resp)
+		$("#ajax").empty();
+		for(var data of resp){
+			var input_html =
+
+
+				"				<tr   class=\"info\">\r\n" +
+				"					<td>"+data.username+"</td>\r\n" +
+				"					<td>"+data.name+"</td>\r\n" +
+				"					<td>"+data.createDate+"</td>\r\n" +
+				"					<td>"+data.code+"</td>\r\n" +
+				"					<td>"+data.validityStart+"</td>\r\n" +
+				"					<td>"+data.validityEnd+"</td>\r\n" +
+				"					<td>"+data.salePrice+"</td>\r\n" +
+				"					<td>"+data.reason+"</td>\r\n" +
+				"					<td>"+data.changeAvailability+"</td>\r\n" +
+				"					</tr>";
+
+				console.log(input_html);
+				$("#ajax").append(input_html);
+		}
+
+
+	}).fail(function(error){
+		alert(JSON.stringify(error));
+	});
+}
+
+
+</script>
+
+
+
+
+<script>
+function asdf(e){
+	console.log(e);
+$(".userId").val(e);
+	return;
+}
+</script>
+<script>
+	//Modal을 가져옵니다.
+	var modals = document.getElementsByClassName("modal");
+	// Modal을 띄우는 클래스 이름을 가져옵니다.
+	var btns = document.getElementsByClassName("btn");
+
+	// Modal을 닫는 close 클래스를 가져옵니다.
+	var spanes = document.getElementsByClassName("close");
+	console.log('spanes =', spanes);
+	var funcs = [];
+
+	// Modal을 띄우고 닫는 클릭 이벤트를 정의한 함수
+	function Modal(num) {
+	//	console.log('넘은 ? = ', num);
+		return function() {
+			// 해당 클래스의 내용을 클릭하면 Modal을 띄웁니다.
+			btns[num].onclick = function() {
+				modals[num].style.display = "block";
+			//	console.log(num);
+			};
+
+			// <span> 태그(X 버튼)를 클릭하면 Modal이 닫습니다.
+			spanes[num].onclick = function() {
+				modals[num].style.display = "none";
+			};
+		};
+	}
+
+	// 원하는 Modal 수만큼 Modal 함수를 호출해서 funcs 함수에 정의합니다.
+	for (var i = 0; i < btns.length; i++) {
+		funcs[i] = Modal(i);
+	}
+
+	// 원하는 Modal 수만큼 funcs 함수를 호출합니다.
+	for (var j = 0; j < btns.length; j++) {
+		funcs[j]();
+	}
+
+	// Modal 영역 밖을 클릭하면 Modal을 닫습니다.
+	window.onclick = function(event) {
+		if (event.target.className == "modal") {
+			event.target.style.display = "none";
+		}
+	};
+</script>
+<script src="/js/addminCoupon.js"></script>
+</html>
+
