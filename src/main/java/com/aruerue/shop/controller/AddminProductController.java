@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +42,15 @@ public class AddminProductController {
 
 	private AddminDto addminDto;
 
+	@GetMapping("/axios") //스프링 4.3쯤인가 그후의 신기술
+//	@RequestMapping(value="/axios", method=RequestMethod.GET) //원래기술
+	public String index(Model model) {
+		System.out.println("axios에왔습니다");
+		List<AddminDto> pro = addminRepository.addminDtoList(); //여긴 원래 관련 상품 때문에 적은거임 굳이 안해도됨
+		model.addAttribute("list", pro); // 당연히 여기도;;
+		
+		return "index";
+	}
 
 
 	@GetMapping("/relatedProducts")
@@ -109,15 +120,6 @@ public class AddminProductController {
 		return "addList";
 	}
 
-	@GetMapping("/axios")
-	public String index(Model model) {
-		System.out.println("axios에왔습니다");
-		
-		List<AddminDto> pro = addminRepository.addminDtoList();
-		model.addAttribute("list", pro);
-		System.out.println("axios 탓다");
-		return "index";
-	}
 	//여긴무시해도됩니다 테스트용임
 	@PostMapping("/instar")
 	public String insert(@RequestParam("file") MultipartFile file) throws IOException {
@@ -146,7 +148,8 @@ public class AddminProductController {
 		System.out.println("일단 crud에 왔습니다");
 		System.out.println("file1의 이름 = "+file.getOriginalFilename());
 		System.out.println("file2의 이름 = "+file2.getOriginalFilename());
-		UUID uuid = UUID.randomUUID();
+		UUID uuid = UUID.randomUUID(); //uuid는 그냥 sha256처럼 난수비슷한걸 엄청나게생성한다
+		//사진만 박으면되는왜쓰는걸까?? 궁금하죠 ㅎㅎㅎㅎㅎㅎㅎㅎ
 		UUID uuid2 = UUID.randomUUID();
 		System.out.println("111111111111111");
 		String thumb =  uuid + "_"+file2.getOriginalFilename();
